@@ -95,8 +95,34 @@
                 .attr("r", function(d){
                     return rScale(d.Population);
             })
-                .style("fill", function(d) { return colorCircles(d.category)})
-                .style("fill-opacity", .2)
+//                .style("fill", function(d) { return colorCircles(d.category)})
+                .style("fill", function(d) 
+                {
+                region = d.Forum_classification
+                if (region === "Europe and North America") {
+                    return "blue"
+                }
+                else if (region === "Middle East and North Africa") {
+                    return "red"
+                }
+                else if (region === "Sub-Saharan Africa") {
+                    return "rgb(249, 217, 42)"
+                }
+                else if (region === "Latin America and the Caribbean") {
+                    return "green"
+                }
+                else if (region === "Eurasia") {
+                    return "purple"
+                }
+                else if (region === "East Asia and Pacific") {
+                    return "pink"
+                }
+                else if (region === "South Asia") {
+                    return "orange"
+                }
+                
+            })
+//                .style("fill-opacity", .2)
 //                .style("stroke", "rgba(211,211,211, 0.8)");
             
             /**********ENTER SELECTION************/
@@ -114,7 +140,7 @@
                             return rScale(d.Population);
                         })
                         .style("fill", colorCircles(3))
-                        .style("fill-opacity", .2)
+                        .style("fill-opacity", .5)
 //                        .append("text").text("Hello");
                         //.style("stroke", "red");
             
