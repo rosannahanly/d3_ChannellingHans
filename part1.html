@@ -7,6 +7,7 @@
 	<link href="./themes/tas_style.css" rel="stylesheet" />
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="./lib/prism.js" charset="utf-8"></script>
+    <script src="d3.legend.js"></script>
     <script type="text/javascript" src="./d3/d3.v4.js" charset="utf-8"></script>
     <style type="text/css">
 		.axis path,
@@ -19,18 +20,57 @@
 		.axis text {
 		    font-family: sans-serif;
 		    font-size: 11px;
-		}	
+		}
+        
+
+  .my-legend .legend-title {
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 90%;
+    font-family: 'Calibri';
+    }
+  .my-legend .legend-scale ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    }
+  .my-legend .legend-scale ul li {
+    display: block;
+    float: left;
+    width: 90px;
+    height: 60px;
+    margin-bottom: 6px;
+    text-align: left;
+    font-size: 80%;
+    list-style: none;
+    color: black;
+    font-family: 'Calibri';
+    }
+  .my-legend ul.legend-labels li span {
+    display: block;
+    float: left;
+    height: 15px;
+    width: 70px;
+    }
+  .my-legend {
+    color: grey;
+    }
+
+
 	</style>
 </head>
 
 <body>
     
-    <h1 id="year_header">Year:</h1>
+    <h1 style="color:blue; opacity: 0.8" id="year_header">Year:</h1>
+    
 
     <script type="text/javascript">
         
         // margins
-        var margin = {top: 20, right: 60, bottom: 100, left:80};
+        var margin = {top: 20, right: 60, bottom: 60, left:80};
         
         // width and height
         var outer_width = 1050;
@@ -63,8 +103,8 @@
         var yAxis = d3.axisLeft().scale(yScale).ticks(10);
         
         
-        
         // Create an svg element
+        
         
         var svg = d3.select("body")
                     .append("svg")
@@ -72,8 +112,10 @@
 			         .attr("height", svg_height + margin.top + margin.bottom)
 			         .append("g")
 			         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
         
         var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
+        
         
         function generateVis(){
             
@@ -121,7 +163,9 @@
                     return "orange"
                 }
                 
-            })
+            });
+            
+            
 //                .style("fill-opacity", .2)
 //                .style("stroke", "rgba(211,211,211, 0.8)");
             
@@ -150,6 +194,8 @@
             points.exit().remove();
             
             d3.select("#year_header").text("Year: " + display_year)
+            
+        
 }
         
         //loaing the data file
@@ -224,9 +270,23 @@
                 
 //            }
         
-            
-        
-    </script>
+            </script>
+    
+    <div class='my-legend'>
+    <div class='legend-title'>Legend</div>
+        <div class='legend-scale'>
+            <ul class='legend-labels'>
+                <li><span style='background-color:blue; opacity:0.7'></span>Europe and North America</li>
+                <li><span style='background-color:red; opacity: 0.7'></span>Middle East and North Africa</li>
+                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span>Sub-Saharan Africa</li>
+                <li><span style='background-color:green; opacity: 0.7'></span>Latin America and the Caribbean</li>
+                <li><span style='background-color:purple; opacity: 0.7'></span>Eurasia</li>
+                <li><span style='background-color:pink; opacity: 0.7'></span>East Asia and Pacific</li>
+                <li><span style='background-color:orange; opacity: 0.7'></span>South Asia</li>
+            </ul>
+        </div>
+    </div>
+    
 
     </body>
 </html>
