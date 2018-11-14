@@ -88,7 +88,7 @@
         // the global dataset object
         var dataset;
         
-        xScale = d3.scaleLinear().range([0, svg_width]);
+        xScale = d3.scaleLog().range([0, svg_width]);
         
         rScale = d3.scaleSqrt().range([0, 5]);
         
@@ -97,7 +97,7 @@
         
         
         // x-axis connected to the x scale
-        var xAxis = d3.axisBottom().scale(xScale).ticks(10);
+        var xAxis = d3.axisBottom().scale(xScale).ticks(2);
         
         //define y-axis
         var yAxis = d3.axisLeft().scale(yScale).ticks(10);
@@ -217,7 +217,7 @@
                 function(d){return d.Global_Competitiveness_Index});
                 
                 
-                xScale.domain([min_GDP, 600000]);
+                xScale.domain([100, 800000]);
                 yScale.domain([0, max_Global_Competitiveness_Index]);
                 rScale.domain([0, max_population]);
                 
