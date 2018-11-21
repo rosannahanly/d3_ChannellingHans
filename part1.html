@@ -129,15 +129,21 @@
              
             points.transition().duration(2000)
                 .attr("cx", function(d,i){
-                    return xScale(d.GDP);
+                    if (d.GDP != ""){
+                        return xScale(d.GDP);
+                    }
             })
                 .attr("cy", function(d){
-                    return yScale(d.Global_Competitiveness_Index);
+                    if(d.Global_Competitiveness_Index != ""){
+                        return yScale(d.Global_Competitiveness_Index);
+                    }
             })
                 .attr("r", function(d){
-                    return rScale(d.Population);
+                    if (d.Population !=""){
+                        return rScale(d.Population);
+                    }
             })
-//                .style("fill", function(d) { return colorCircles(d.category)})
+//               .style("fill", function(d) { return colorCircles(d.category)})
                 .style("fill", function(d) 
                 {
                 region = d.Forum_classification
@@ -173,23 +179,26 @@
             points
                 .enter()
                     .append("circle")
-                        .attr("cx", function(d,i){
-                            return xScale(d.GDP);
-                        })
-                        .attr("cy", function(d){
-                            return yScale(d.Global_Competitiveness_Index);
-                        })
-                        .transition()
-                        .attr("r", function(d){
-                            return rScale(d.Population);
-                        })
-                        .style("fill", colorCircles(3))
-                        .style("fill-opacity", .5)
-//                        .append("text").text("Hello");
-                        //.style("stroke", "red");
-            
-            
-            /**********EXIT SELECTION************/
+                    .attr("cx", function(d,i){
+                    if (d.GDP != ""){
+                        return xScale(d.GDP);
+                    }
+            })
+                .attr("cy", function(d){
+                    if(d.Global_Competitiveness_Index != ""){
+                        return yScale(d.Global_Competitiveness_Index);
+                    }
+            })
+                .attr("r", function(d){
+                    if (d.Population !=""){
+                        return rScale(d.Population);
+                    }   
+            })
+                .style("fill", colorCircles(3))
+                .style("fill-opacity", .5)
+//              .append("text").text("Hello");
+                //.style("stroke", "red");
+          /**********EXIT SELECTION************/
             
             points.exit().remove();
             
@@ -211,13 +220,13 @@
                 dataset = data;
                 
                 var max_population = d3.max(dataset, function(d){return d.Population    ;} );
-                var min_GDP = d3.min(dataset, function(d) { return d.GDP;} );
-                var max_GDP = d3.max(dataset, function(d) { return d.GDP;} );
+                var min_GDP = d3.min(dataset, function(d) { return +d.GDP;} );
+                var max_GDP = d3.max(dataset, function(d) { return +d.GDP;} );
                 var max_Global_Competitiveness_Index = d3.max(dataset, 
                 function(d){return d.Global_Competitiveness_Index});
                 
                 
-                xScale.domain([100, 800000]);
+                xScale.domain([10, max_GDP]);
                 yScale.domain([0, max_Global_Competitiveness_Index]);
                 rScale.domain([0, max_population]);
                 
@@ -255,6 +264,7 @@
                 generateVis();
                 
                 // set up an interval callback to refresh the visuaslaition every second
+                // JQuery button goes here
 			setInterval(function() {
                 display_year = display_year + 1;
                 if(display_year > 2017){
