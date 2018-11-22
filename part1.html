@@ -111,7 +111,7 @@
 			         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         
-        var colorCircles = d3.scaleOrdinal(d3.schemeCategory20b);
+        var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
         
         
         function generateVis(){
@@ -212,7 +212,8 @@
                 }
                 
             })
-                .style("fill-opacity", .5);
+                .style("fill-opacity", .5)
+            .append("title").text(function(d, i) {return d.Country });
           /**********EXIT SELECTION************/
             
             points.exit().remove();
