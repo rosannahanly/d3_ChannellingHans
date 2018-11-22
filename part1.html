@@ -140,6 +140,7 @@
                         return rScale(d.Population);
                     }
             })
+                .style("fill-opacity", .5)
                 .style("fill", function(d) 
                 {
                 region = d.Forum_classification
@@ -212,7 +213,7 @@
                 }
                 
             })
-                .style("fill-opacity", .5)
+            .style("fill-opacity", .5)
             .append("title").text(function(d, i) {return d.Country });
           /**********EXIT SELECTION************/
             
@@ -283,8 +284,8 @@
                 // JQuery button goes here
 			setInterval(function() {
                 display_year = display_year + 1;
-                if(display_year > 2017){
-                    display_year = 2017;
+                if(display_year > 2016){
+                    display_year = 2016;
                 }
 
 				
