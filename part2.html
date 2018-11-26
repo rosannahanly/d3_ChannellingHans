@@ -1,4 +1,4 @@
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <!-- <style>
         div.tooltip {
@@ -31,6 +31,47 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.js"></script>
+    
+    
+    <style>
+    .my-legend .legend-title {
+    text-align: left;
+    margin-bottom: 8px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 90%;
+    font-family: 'Calibri';
+    }
+  .my-legend .legend-scale ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    }
+  .my-legend .legend-scale ul li {
+    display: block;
+    float: left;
+    width: 90px;
+    height: 60px;
+    margin-bottom: 6px;
+    margin-left: 10px;
+    text-align: left;
+    font-size: 80%;
+    list-style: none;
+    color: black;
+    font-family: 'Calibri';
+    }
+  .my-legend ul.legend-labels li span {
+    display: block;
+    float: left;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    }
+  .my-legend {
+    color: grey;
+    }</style>
+    
 </head>
 <body>
 <h4>Created by Sophie Heseltine and Rosanna Hanly</h4>
@@ -87,11 +128,11 @@
     });
 
     // margins
-    var margin = {top: 20, right: 60, bottom: 60, left:80};
+    var margin = {top: 40, right: 60, bottom: 60, left:80};
         
     // width and height
     var outer_width = 1050;
-    var outer_height = 550
+    var outer_height = 500
 
     var svg_width = outer_width - margin.left - margin.right;
     var svg_height = outer_height - margin.top - margin.bottom;
@@ -213,7 +254,7 @@ function generateVis(){
 }
 
 // loading in Data     
-d3.csv("./GCI_CompleteData2.csv").then(function(data){
+d3.csv("./GCI_CompleteData3.csv").then(function(data){
     dataset= data;
     handleData(dataset);
 }, function(error) {
@@ -313,4 +354,20 @@ function populateYearDropDown(data){
     };
 }
 </script>
+    
+    
+    <div class='my-legend'>
+    <div class='legend-title'>Legend</div>
+        <div class='legend-scale'>
+            <ul class='legend-labels'>
+                <li><span style='background-color:blue; opacity:0.7'></span><br>Europe and North America</li>
+                <li><span style='background-color:red; opacity: 0.7'></span><br>Middle East and North Africa</li>
+                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span><br>Sub-Saharan Africa</li>
+                <li><span style='background-color:green; opacity: 0.7'></span><br>Latin America and the Caribbean</li>
+                <li><span style='background-color:purple; opacity: 0.7'></span><br>Eurasia</li>
+                <li><span style='background-color:pink; opacity: 0.7'></span><br>East Asia and Pacific</li>
+                <li><span style='background-color:orange; opacity: 0.7'></span><br>South Asia</li>
+            </ul>
+        </div>
+    </div>
 </html>

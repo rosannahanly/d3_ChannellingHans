@@ -52,7 +52,8 @@
     display: block;
     float: left;
     height: 15px;
-    width: 70px;
+    width: 15px;
+    border-radius: 50%;
     }
   .my-legend {
     color: grey;
@@ -101,7 +102,7 @@
         
         // width and height
         var outer_width = 1050;
-        var outer_height = 550
+        var outer_height = 500
 
         var svg_width = outer_width - margin.left - margin.right;
         var svg_height = outer_height - margin.top - margin.bottom;
@@ -154,7 +155,15 @@
              
             points.transition().duration(2000)
                 .attr("cx", function(d,i){ return xScale(d.GDP); })
-                .attr("cy", function(d){ return yScale(d.Global_Competitiveness_Index); })
+            //handle null values for GCI
+                .attr("cy", function(d)
+                { 
+                gci = d.Global_Competitiveness_Index
+                if (gci === ""){
+                    return yScale(3.5)
+                }
+                else return yScale(d.Global_Competitiveness_Index)
+                })
                 .attr("r", function(d){ return rScale(d.Population); })
                 .style("fill-opacity", .5)
                 .style("fill", function(d) 
@@ -189,7 +198,15 @@
                 .enter()
                     .append("circle")
                     .attr("cx", function(d,i){ return xScale(d.GDP); })
-                .attr("cy", function(d){ return yScale(d.Global_Competitiveness_Index);})
+                .attr("cy", function(d)
+                { 
+                gci = d.Global_Competitiveness_Index
+                if (gci === ""){
+                    //return yScale(d.Population/d.GDP/1000)
+                    return yScale(3.5)
+                }
+                else return yScale(d.Global_Competitiveness_Index)
+                })
                 .attr("r", function(d){ return rScale(d.Population);})
                 .style("fill", function(d) 
                 {
@@ -229,7 +246,7 @@
 }
         
         //loaing the data file
-        d3.csv("./GCI_CompleteData2.csv", function(error, data){
+        d3.csv("./GCI_CompleteData3.csv", function(error, data){
 //            handle loading errors
 //            if(error){
 //                console.log("something went wrong");
@@ -335,13 +352,13 @@
     <div class='legend-title'>Legend</div>
         <div class='legend-scale'>
             <ul class='legend-labels'>
-                <li><span style='background-color:blue; opacity:0.7'></span>Europe and North America</li>
-                <li><span style='background-color:red; opacity: 0.7'></span>Middle East and North Africa</li>
-                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span>Sub-Saharan Africa</li>
-                <li><span style='background-color:green; opacity: 0.7'></span>Latin America and the Caribbean</li>
-                <li><span style='background-color:purple; opacity: 0.7'></span>Eurasia</li>
-                <li><span style='background-color:pink; opacity: 0.7'></span>East Asia and Pacific</li>
-                <li><span style='background-color:orange; opacity: 0.7'></span>South Asia</li>
+                <li><span style='background-color:blue; opacity:0.7'></span><br>Europe and North America</li>
+                <li><span style='background-color:red; opacity: 0.7'></span><br>Middle East and North Africa</li>
+                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span><br>Sub-Saharan Africa</li>
+                <li><span style='background-color:green; opacity: 0.7'></span><br>Latin America and the Caribbean</li>
+                <li><span style='background-color:purple; opacity: 0.7'></span><br>Eurasia</li>
+                <li><span style='background-color:pink; opacity: 0.7'></span><br>East Asia and Pacific</li>
+                <li><span style='background-color:orange; opacity: 0.7'></span><br>South Asia</li>
             </ul>
         </div>
     </div>
