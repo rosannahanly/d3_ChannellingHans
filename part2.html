@@ -1,0 +1,94 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+    <!-- <style>
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 70px;
+            height: 50px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightgray;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style> -->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Part 2</title>
+    <script></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link href="./themes/prism.css" rel="stylesheet" />
+	<link href="./themes/tas_style.css" rel="stylesheet" />
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="./lib/prism.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./d3/d3.v4.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.js"></script>
+</head>
+<body>
+<h2>Created by Sophie Heseltine and Rosanna Hanly</h2>
+
+<div class="container">
+    <p id="hans">
+    </p>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h3 id ="display_year" style="margin-top: 0;">Year: 2007</h3>
+                </div>
+                <div class="col-xs-8">
+                    <input list="countryDropDown" name = "browser" id = "countryDropDownInput" placeholder="Select Country">
+                    <datalist id="countryDropDown">
+
+                    </datalist>
+                    <button type="button" class="btn btn-primary" id="showTraceButton"><span>Show Trace</span></button>
+                    <button class="btn btn-info" data-toggle="popover" title="Show Trace on the Main Visualisation"
+                        data-content="Show each of the historic positions of the selected country from 2007 to the currently displayed year on the graph."
+                        data-placement="top" data-trigger="focus">?</button>
+                </div>
+            </div>
+            <h2 id="g1"></h2>
+        </div>
+    </div>
+</div>
+
+    
+</body>
+<script>
+d3.csv("./GCI_CompleteData2.csv").then(function(data){
+    dataset= data;
+    handleData(dataset);
+}, function(error) {
+    console.log("Error loading data")
+    console.log(error);
+    document.getElementById("hans").innerHTML += "<br/><span>Error Loading in data</span>"
+});
+function handleData(dataset){
+    //call the x-axis
+    // Generate the initial visualisation
+    //populate country dropdown
+    populateCountryDropDown(dataset);
+}
+
+function populateCountryDropDown(data){
+    let countries = new Set();
+    _.forEach(data, function(row) {
+        countries.add(row.Country) //adding each country to a set
+    });
+    for (let country of countries) {
+        let countryDropDownUL = document.getElementById("countryDropDown");
+        let option = document.createElement("option")
+        option.setAttribute("value", country);
+        countryDropDownUL.appendChild(option);
+    };
+}
+</script>
+</html>
