@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- <style>
+    <style>
         div.tooltip {
             position: absolute;
             text-align: center;
@@ -13,14 +13,14 @@
             border-radius: 8px;
             pointer-events: none;
         }
-    </style> -->
+    </style>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Part 2</title>
     <script></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
     <link href="./themes/prism.css" rel="stylesheet" />
 	<link href="./themes/tas_style.css" rel="stylesheet" />
 	<script src="https://d3js.org/d3.v5.min.js"></script>
@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-xs-4">
                     <button type="button" class="btn btn-success" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
-                    <h3 id ="display_year" style="margin-top: 0;">Year: 2007</h3>
+                    <h3 id ="year_header" style="margin-top: 0;">Year: </h3>
                     <div class="col-xs-4">
                             <input list="yearDropDown" id = "yearDropDownInput" placeholder="2007">
                             <datalist id="yearDropDown">
@@ -97,16 +97,17 @@
                     <datalist id="countryDropDown">
 
                     </datalist>
-                    <button type="button" class="btn btn-primary" id="showTraceButton"><span>Show Trace</span></button>
+                    <button type="button" class="btn btn-primary" id="traceButton"><span>Show Trace</span></button>
                     <!-- <button class="btn btn-info" data-toggle="popover" title="Show Trace on the Main Visualisation"
                         data-content="Show each of the historic positions of the selected country from 2007 to the currently displayed year on the graph."
                         data-placement="top" data-trigger="focus">?</button> -->
                 </div>
             </div>
-            <h2 id="g1"></h2>
+            <h2 id="part1"></h2>
         </div>
     </div>
 </div>
+<br/>
 
     
 </body>
@@ -127,6 +128,32 @@
         }
     });
 
+    let year = 2007;
+    //let dataset = {};
+    document.getElementById("yearDropDownInput").oninput = function(){
+        console.log("Years are working!!")
+        display_year=+this.value;
+        d3.select("#year_header").text("Year: " + display_year)
+        generateVis(dataset, false);
+    };
+
+    var showingTrace = false;
+    var country = "";
+    $('#traceButton').on("click", function(){
+        country = $('#countryDropDownInput').val();
+        if(country == "" && !showingTrace) return;
+        showingTrace = !showingTrace;
+        if(showingTrace){
+            $('#traceButton').addClass('btn-danger').removeClass('btn-primary');
+            $('#traceButton span').text("Hide Trace");
+        } else {
+            $('#traceButton').addClass('btn-primary').removeClass('btn-danger');
+            $('#traceButton span').text("Show Trace"); 
+        }
+        generateVis(dataset, false);
+    });
+
+
     // margins
     var margin = {top: 40, right: 60, bottom: 60, left:80};
         
@@ -141,26 +168,31 @@
     function yearFilter(value){
         return (value.Year == display_year)
     }
+
+    function yearAndCountryFilter(value){
+        return value.Country == country && +value.Year <= +display_year;
+    }
         
     // the global dataset object
     var dataset;
 
     //Scaling the data so that it can be viewed on a graph    
-    xScale = d3.scaleLog().range([0, svg_width]);
+    xScale = d3.scaleLog().domain([100, 2.4e6]).range([0, svg_width]);
     rScale = d3.scaleSqrt().range([0, 5]);
-    yScale = d3.scaleLinear().range([svg_height, 0]);
-        
-        
-        
+    yScale = d3.scaleLinear().domain([0,7]).range([svg_height, 0]);
+               
     // x-axis connected to the x scale
-    var xAxis = d3.axisBottom().scale(xScale).ticks(2);
+    var xAxis = d3.axisBottom().scale(xScale).ticks(10, ".0s");
         
     //define y-axis
-    var yAxis = d3.axisLeft().scale(yScale).ticks(10);
-        
-        
+    var yAxis = d3.axisLeft().scale(yScale).ticks(5).tickFormat(d3.format(".0s"));
+           
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     // Create an svg element
-    var svg = d3.select("body")
+    var svg = d3.select("#part1")
         .append("svg")
         .attr("width", svg_width + margin.left + margin.right)
 		.attr("height", svg_height + margin.top + margin.bottom)
@@ -173,7 +205,9 @@ function generateVis(){
             
             /**********DATA JOIN************/
             var points = svg.selectAll("circle")
-                            .data(filtered_dataset);
+                            .data(filtered_dataset, function key(d){
+                                return d.Country;
+                            });
             
             /**********UPDATE SELECTION************/
              
@@ -181,7 +215,10 @@ function generateVis(){
                 .attr("cx", function(d,i){ return xScale(+d.GDP); })
                 .attr("cy", function(d){ return yScale(+d.Global_Competitiveness_Index); })
                 .attr("r", function(d){ return rScale(+d.Population); })
-                .style("fill-opacity", .5)
+                .style("fill-opacity", function(d){
+                    if(showingTrace) return .3;
+                    else return .5;
+                })
                 .style("fill", function(d) 
                 {
                 region = d.Forum_classification
@@ -206,8 +243,54 @@ function generateVis(){
                 else if (region === "South Asia") {
                     return "orange"
                 }
-                
             });
+
+            if (showingTrace){
+                country = $('#countryDropDownInput').val();
+                let selectedCountry = dataset.filter(yearAndCountryFilter);
+                console.log(selectedCountry);
+                let tracePoints = svg.selectAll("#circle_trace")
+                    .data(selectedCountry, function key(d){
+                        return d.Country;
+                    });
+                let traceEnter = tracePoints.enter()
+                    .append("circle")
+                    .attr("id", function(d){
+                        return "circle_trace"
+                    })
+                    .attr("cx", function(d,i){ return xScale(+d.GDP); })
+                    .attr("cy", function(d){ return yScale(+d.Global_Competitiveness_Index); })
+                    .attr("r", function(d){ return rScale(+d.Population); })
+                    .style("fill-opacity", function(d){
+                        return 0.8;
+                    })
+                    .style("stroke", "black")
+                    .style("fill", function(d) {
+                        region = d.Forum_classification
+                        if (region === "Europe and North America") {
+                            return "blue"
+                        }
+                        else if (region === "Middle East and North Africa") {
+                            return "red"
+                        }
+                        else if (region === "Sub-Saharan Africa") {
+                            return "rgb(249, 217, 42)"
+                        }
+                        else if (region === "Latin America and the Caribbean") {
+                            return "green"
+                        }
+                        else if (region === "Eurasia") {
+                            return "purple"
+                        }
+                        else if (region === "East Asia and Pacific") {
+                            return "pink"
+                        }
+                        else if (region === "South Asia") {
+                            return "orange"
+                        }
+                    });
+
+            }
                         
             /**********ENTER SELECTION************/
             points
@@ -275,7 +358,7 @@ function handleData(dataset){
         if (playing) {
             display_year = display_year +1;
             if(display_year >2017){
-                display_year =2017;
+                display_year =2007;
             }
             generateVis();
         }
