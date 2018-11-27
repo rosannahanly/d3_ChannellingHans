@@ -79,10 +79,12 @@
 <div class="container">
     <p id="hans">
     </p>
+    <!--This is where the control buttons are for first graph-->
     <div class="row">
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-xs-4">
+                    <!-- I think this button needs to be moved -->
                     <button type="button" class="btn btn-success" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
                     <h3 id ="year_header" style="margin-top: 0;">Year: </h3>
                     <div class="col-xs-4">
@@ -98,16 +100,50 @@
 
                     </datalist>
                     <button type="button" class="btn btn-primary" id="traceButton"><span>Show Trace</span></button>
-                    <!-- <button class="btn btn-info" data-toggle="popover" title="Show Trace on the Main Visualisation"
-                        data-content="Show each of the historic positions of the selected country from 2007 to the currently displayed year on the graph."
-                        data-placement="top" data-trigger="focus">?</button> -->
                 </div>
             </div>
+            <!-- This is where the first graph goes -->
             <h2 id="part1"></h2>
         </div>
     </div>
+    <!--Legend for the first graph-->
+    <div class='my-legend'>
+        <div class='legend-title'>Legend</div>
+        <div class='legend-scale'>
+            <ul class='legend-labels'>
+                <li><span style='background-color:blue; opacity:0.7'></span><br>Europe and North America</li>
+                <li><span style='background-color:red; opacity: 0.7'></span><br>Middle East and North Africa</li>
+                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span><br>Sub-Saharan Africa</li>
+                <li><span style='background-color:green; opacity: 0.7'></span><br>Latin America and the Caribbean</li>
+                <li><span style='background-color:purple; opacity: 0.7'></span><br>Eurasia</li>
+                <li><span style='background-color:pink; opacity: 0.7'></span><br>East Asia and Pacific</li>
+                <li><span style='background-color:orange; opacity: 0.7'></span><br>South Asia</li>
+            </ul>
+        </div>
+    </div>
+    <!--The control buttons for the second visualisation-->
+    <div class="row">
+        <div class="col-xs-6">
+            <input list="countryDropDown" id="countryDropDownInput" placeholder="Select Country One">
+            <datalist id="countryDropDown">
+
+            </datalist>
+        </div>
+        <div class="col-xs-6">
+                <input list="countryDropDown" id="countryDropDownInput" placeholder="Select Country One">
+                <datalist id="countryDropDown">
+                    
+                </datalist>
+            </div>
+
+    </div>
+    <!--This is where the second visualisation will go-->
+    <h2 id="part2"></h2>
 </div>
-<br/>
+
+
+
+
 
     
 </body>
@@ -338,7 +374,7 @@ function generateVis(){
 
 // loading in Data     
 d3.csv("./GCI_CompleteData3.csv").then(function(data){
-    dataset= data;
+    dataset=data;
     handleData(dataset);
 }, function(error) {
     console.log("Error loading data")
@@ -349,6 +385,7 @@ function handleData(dataset){
     // Create the scales and call the axis
     makeScales(dataset);
     createAxis();
+    createPillarsXAxis();
     // Generate the initial visualisation
     generateVis(dataset);
     //populate country dropdown
@@ -436,21 +473,40 @@ function populateYearDropDown(data){
         yearDropDownUL.appendChild(option);
     };
 }
+
+var svgPillars = d3.select("#part2")
+            .append("svg")
+            .attr("width", svg_width + margin.left + margin.right)
+            .attr("height", svg_height + margin.top + margin.bottom)
+            .style("background", "white")
+            //.style("width", "80vw")
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var x = [];
+function createPillarsXAxis(data) {
+    //console.log(dataset.columns);
+    var columns = dataset.columns;
+    for (i=0; i<columns.length; i++){
+        if(columns[i].includes("pillar"))
+            x.push(columns[i].split("_")[2]);
+    }
+    xScalePillar = d3.scaleBand().domain(x).rangeRound([0, svg_width], 0.1).paddingInner(0,1);
+    xAxisPillar = d3.axisBottom()
+    .scale(xScalePillar)
+    .ticks(10, ".0s");
+}
+
+svgPillars.append("g")
+    .attr("class", "axis")
+    .attr("id", "x-axis0")
+    .attr("transform", "translate(0," + svg_height + ")");
+
+svgPillars.append("g")
+    .attr("class", "axis")
+    .attr("id", "y-axis")
+    .call(yAxis);
+
+
 </script>
-    
-    
-    <div class='my-legend'>
-    <div class='legend-title'>Legend</div>
-        <div class='legend-scale'>
-            <ul class='legend-labels'>
-                <li><span style='background-color:blue; opacity:0.7'></span><br>Europe and North America</li>
-                <li><span style='background-color:red; opacity: 0.7'></span><br>Middle East and North Africa</li>
-                <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span><br>Sub-Saharan Africa</li>
-                <li><span style='background-color:green; opacity: 0.7'></span><br>Latin America and the Caribbean</li>
-                <li><span style='background-color:purple; opacity: 0.7'></span><br>Eurasia</li>
-                <li><span style='background-color:pink; opacity: 0.7'></span><br>East Asia and Pacific</li>
-                <li><span style='background-color:orange; opacity: 0.7'></span><br>South Asia</li>
-            </ul>
-        </div>
-    </div>
 </html>
