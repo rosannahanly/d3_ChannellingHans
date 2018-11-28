@@ -88,7 +88,6 @@
                 <div class="col-xs-4">
                     <!-- I think this button needs to be moved -->
                     <button type="button" class="btn btn-success" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
-                    <!-- <h3 id ="year_header" style="margin-top: 0;">Year: </h3> -->
                     <div class="col-xs-4">
                             <input list="yearDropDown" id = "yearDropDownInput" placeholder="2007">
                             <datalist id="yearDropDown">
@@ -180,7 +179,7 @@
     document.getElementById("yearDropDownInput").oninput = function(){
         console.log("Years are working!!")
         display_year=+this.value;
-        d3.select("#year_header").text("Year: " + display_year)
+        d3.select("#year_header").text(display_year)
         generateVis(dataset, false)
         generateVisPillars(dataset)
         generateVisPillars(dataset, "right");
@@ -410,7 +409,7 @@ function generateVis(){
             
             points.exit().remove();
             
-            d3.select("#year_header").text("Year: " + display_year)
+            d3.select("#year_header").text(display_year)
             
         
 }
@@ -468,9 +467,11 @@ function makeScales(data){
 function createYearText(){
     svg.append("text")
         .attr("id", "year_header")
-        .attr("x", "200")
-        .attr("y", "200")
-    .text(year_header);
+        .attr("x", svg_width/5)
+        .attr("y", svg_height/1.5)
+        .text(year_header)
+        .style("font-size", "200pt")
+        .style("opacity", "0.8")
         ;
 }
 
