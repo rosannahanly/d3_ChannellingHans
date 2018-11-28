@@ -72,6 +72,10 @@
     color: grey;
     }
     
+        
+        h3 {
+            margin-top: 0;
+        }
     </style>
     
 </head>
@@ -131,7 +135,7 @@
     
     <!--The control buttons for the second visualisation-->
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-5">
             <input list="countryDropDown" id="countryDropDownInputLeft" placeholder="Select Country One">
             <datalist id="countryDropDxown">
             </datalist>
@@ -139,7 +143,10 @@
             
             
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-2">
+            <h3> vs.</h3>
+        </div>
+        <div class="col-xs-5">
                 <input list="countryDropDown" id="countryDropDownInputRight" placeholder="Select Country One">
                 <datalist id="countryDropDown">
                 </datalist>
@@ -404,7 +411,7 @@ function generateVis(){
                 
             })
             .style("fill-opacity", .5)
-            .append("title").text(function(d, i) {return d.Country });
+            .append("title").text(function(d, i) {return d.Country + "\nPopulation: " + d.Population});
           /**********EXIT SELECTION************/
             
             points.exit().remove();
