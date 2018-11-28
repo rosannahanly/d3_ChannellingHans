@@ -124,16 +124,18 @@
     <!--The control buttons for the second visualisation-->
     <div class="row">
         <div class="col-xs-6">
-            <input list="countryDropDown" id="countryDropDownInput" placeholder="Select Country One">
+            <input list="countryDropDown" id="countryDropDownInputLeft" placeholder="Select Country One">
             <datalist id="countryDropDown">
-
             </datalist>
+            <button type="button" class="btn btn-primary" id="showPillarsButtonLeft"><span>Show Country</span></button>
+            
+            
         </div>
         <div class="col-xs-6">
-                <input list="countryDropDown" id="countryDropDownInput" placeholder="Select Country One">
+                <input list="countryDropDown" id="countryDropDownInputRight" placeholder="Select Country One">
                 <datalist id="countryDropDown">
-                    
                 </datalist>
+                <button type="button" class="btn btn-primary" id="showPillarsButtonRight"><span>Show Country</span></button>
             </div>
 
     </div>
@@ -188,6 +190,31 @@
         }
         generateVis(dataset, false);
     });
+    
+    
+    //buttons for pillar visualisation
+    let countryOneButtonClicked = false;
+    let countryTwoButtonClicked = false;
+    
+    $('#showPillarsButtonLeft').on("click", function() {
+        countryOneButtonClicked = true;
+        let pillarsCompare = countryTwoButtonClicked;
+        let country = $('#countryDropDownInputLeft').val();
+        console.log(country + "country");
+        if (country == "") return;
+        generateVisPillars(dataset);
+        console.log(country + "left bars");
+    });
+    
+    $('#showPillarsButtonRight').on("click", function() {
+        countryTwoButtonClicked = true;
+        let pillarsCompare = countryOneButtonClicked;
+        let country = $('#countryDropDownInputRight').val();
+        if (country == "") return;
+        generateVisPillars(dataset, "right");
+        console.log(country + "right bars");
+    });
+
 
 
     // margins
@@ -207,6 +234,10 @@
 
     function yearAndCountryFilter(value){
         return value.Country == country && +value.Year <= +display_year;
+    }
+    
+    function yearAndCountryFilterP(value) {
+        return yearFilter(value) && value.Country == country;
     }
         
     // the global dataset object
@@ -388,6 +419,8 @@ function handleData(dataset){
     createPillarsXAxis();
     // Generate the initial visualisation
     generateVis(dataset);
+    generateVisPillars(dataset);
+    generateVisPillars(dataset, "right");
     //populate country dropdown
     populateCountryDropDown(dataset);
     populateYearDropDown(dataset);
@@ -398,6 +431,9 @@ function handleData(dataset){
                 display_year =2007;
             }
             generateVis();
+            document.getElementById("yearDropDown").value = display_year;
+            generateVisPillars(dataset);
+            generateVisPillars(dataset, "right");
         }
     }, 2000);
 }
@@ -499,13 +535,135 @@ function createPillarsXAxis(data) {
 
 svgPillars.append("g")
     .attr("class", "axis")
-    .attr("id", "x-axis0")
+    .attr("id", "x-axisP")
     .attr("transform", "translate(0," + svg_height + ")");
 
 svgPillars.append("g")
     .attr("class", "axis")
     .attr("id", "y-axis")
     .call(yAxis);
+    
+
+function generateVisPillars(data, side="left"){
+    console.log("starting function");
+    country = side === "left" ? $('#countryDropdownInputLeft').val() : $('#countryDropdownInputRight').val();
+    console.log(side);
+    svgPillars.select('#x-axisP').call(xAxisPillar);
+    let filtered_dataset = dataset.filter(yearAndCountryFilterP);
+    let twelvePillars = [];
+    if (typeof filtered_dataset[0] !== 'undefined') {
+        twelvePillars = Object.entries(filtered_dataset[0]).slice(2,14);
+        console.log(twelvePillars);
+        filtered_dataset = twelvePillars;
+    }
+    
+    if (side === "left") {
+        /*******PERFORM DATA JOIN*******/
+        let leftBars = svgPillars.selectAll('#leftBars')
+        .data(filtered_dataset, function key(d) {
+            return d[0].split('_'[2]);
+        });
+        
+        /******** UPDATE SELECTION*********/
+        
+        
+        leftBars
+            .transition()
+            .duration(2000)
+            .attr("x", function(d,i) {
+                  return xScalePillar(d[0].split('_')[2]);
+                  })
+            .attr("y", function(d) {
+            return yScale(+d[1]);
+            })
+            .attr("width", xScalePillar.bandwidth()/2)
+            .attr("height", function(d) {
+            return svg_height - yScale(+d[1]);
+            })
+            .style("fill", "black");
+        
+        
+        leftBars.enter()
+            .append("rect")
+            .attr("id", function(d) {
+            return "leftBars";
+            })
+            .attr("x", function(d,i) {
+            return xScalePillar(d[0],split('_')[2]);
+            })
+            .attr("y", function(d) {
+            return yScale(+d[1]);
+            })
+            .attr("width", xScalePillar.bandwidth()/2)
+            .attr("height", function(d) {
+            return svg_height - yScale(+d[1]);
+            })
+            .style("fill", "red")
+            .transition()
+            .duration(2000);
+        
+        
+        leftBars.exit()
+            .transition()
+            .duration(2000)
+            .attr("width", 0)
+            .remove();
+    }
+    
+    
+    //right bars
+    /*****DATA JOIN****/
+    else {
+        let rightBars = svgPillars.selectAll('#rightBars')
+            .data(filtered_dataset, function key(d) {
+                return d[0].split('_')[2];
+            });
+        
+        /****HANDLE UPDATE SELECTION*****/
+        rightBars
+            .transition()
+            .duration(2000)
+            .attr("x", function(d,i){
+            let xPos = xScalePillar(d[0].split('_')[2]);
+            return xPos + xScalePillar.bandwidth()/2;
+            })
+            .attr("y", function(d) {
+            return yScale(+d[1]);
+            })
+            .attr("width", xScalePillar.bandwidth()/2)
+            .attr("height", function(d) {
+            return svg_height - yScale(+d[1]);
+            })
+            .style("fill", "yellow");
+        
+        
+        rightBars.enter()
+            .append("rect")
+            .attr("id", function(d) {
+            return "rightBars";
+            })
+            .attr("x", function(d,i){
+            let xPos = xScalePillar(d[0].split('_')[2]);
+            return xPos + xScalePillar.bandwidth()/2;
+            })
+            .attr("y", function(d) {
+            return yScale(+d[1]);
+            })
+            .attr("width", xScalePillar.bandwidth()/2)
+            .attr("height", function(d) {
+            return svg_height - yScale(+d[1]);
+            })
+            .style("fill", "blue");
+        
+        /****EXIT SELECTION****/
+        
+        rightBars.exit()
+            .transition()
+            .duration(2000)
+            .attr("width", 0)
+            .remove();
+    }
+}
 
 
 </script>
