@@ -1,19 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <style>
-        div.tooltip {
-            position: absolute;
-            text-align: center;
-            width: 70px;
-            height: 50px;
-            padding: 2px;
-            font: 12px sans-serif;
-            background: lightgray;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-    </style>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,56 +17,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.js"></script>
-    
-    
-    <style>
-    .my-legend .legend-title {
-    text-align: left;
-    margin-bottom: 8px;
-    margin-left: 10px;
-    font-weight: bold;
-    font-size: 90%;
-    font-family: 'Calibri';
-    }
-  .my-legend .legend-scale ul {
-    margin: 0;
-    padding: 0;
-    float: left;
-    list-style: none;
-    }
-  .my-legend .legend-scale ul li {
-    display: block;
-    float: left;
-    width: 70px;
-    height: 60px;
-    margin-bottom: 6px;
-    margin-left: 10px;
-    text-align: left;
-    font-size: 80%;
-    list-style: none;
-    color: black;
-    font-family: 'Calibri';
-    }
-  .my-legend ul.legend-labels li span {
-    display: block;
-    float: left;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    }
-  .my-legend {
-    color: grey;
-    }
-    
-        
-        h3 {
-            margin-top: 0;
-        }
-    </style>
+    <link href="styles.css" type="text/css" rel="stylesheet">
     
 </head>
 <body>
-<h4>Channelling Hans; press the the play button below to see the animation of the world economic forum global competiveness index</h4>
+    <h2>Channelling Hans</h2>
+    <h4 style="text-align: center; margin-left: 20%; margin-right:20%">Press the the play button to see the development of the countries of the world based on GDP and the Global Competiveness Index between the years 2007-2017</h4>
 
 <div class="container">
     <p id="hans">
@@ -104,7 +46,7 @@
                     <datalist id="countryDropDown">
 
                     </datalist>
-                    <button type="button" class="btn btn-primary" id="traceButton"><span>Show Trace</span></button>
+                    <button type="button" class="btn btn-primary" id="traceButton">Show Trace</button>
                 </div>
             </div>
         </div>
@@ -117,13 +59,13 @@
                 <div class='legend-title'>Legend</div>
                 <div class='legend-scale'>
                     <ul class='legend-labels'>
-                        <li><span style='background-color:blue; opacity:0.9'></span><br>Europe and North America</li>
-                        <li><span style='background-color:red; opacity: 0.9'></span><br>Middle East and North Africa</li>
-                        <li><span style='background-color:rgb(249, 217, 42); opacity: 0.9'></span><br>Sub-Saharan Africa</li>
-                        <li><span style='background-color:green; opacity: 0.9'></span><br>Latin America and the Caribbean</li>
-                        <li><span style='background-color:purple; opacity: 0.9'></span><br>Eurasia</li>
-                        <li><span style='background-color:pink; opacity: 0.9'></span><br>East Asia and Pacific</li>
-                        <li><span style='background-color:orange; opacity: 0.9'></span><br>South Asia</li>
+                        <li><span style='background-color:blue; opacity:0.7'></span><br>Europe and North America</li>
+                        <li><span style='background-color:red; opacity: 0.7'></span><br>Middle East and North Africa</li>
+                        <li><span style='background-color:rgb(249, 217, 42); opacity: 0.7'></span><br>Sub-Saharan Africa</li>
+                        <li><span style='background-color:green; opacity: 0.7'></span><br>Latin America and the Caribbean</li>
+                        <li><span style='background-color:purple; opacity: 0.7'></span><br>Eurasia</li>
+                        <li><span style='background-color:pink; opacity: 0.7'></span><br>East Asia and Pacific</li>
+                        <li><span style='background-color:orange; opacity: 0.7'></span><br>South Asia</li>
                     </ul>
                 </div>
         </div>
@@ -636,7 +578,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "rgb(158, 202, 225)")
+            .style("fill", "blue")
+            .style("opacity", "0.6");
         
         
         leftBars.enter()
@@ -654,7 +597,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "rgba(158, 202, 225, 0.7)")
+            .style("fill", "blue")
+            .style("opacity", "0.6")
             .transition()
             .duration(2000);
         
@@ -690,7 +634,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "rgb(49, 130, 189)");
+            .style("fill", "black")
+            .style("opacity", "0.2");
         
         
         rightBars.enter()
@@ -709,7 +654,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "rgb(49, 130, 189)");
+            .style("fill", "black")
+            .style("opacity", "0.2");
         
         /****EXIT SELECTION****/
         

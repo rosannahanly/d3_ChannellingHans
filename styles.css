@@ -1,0 +1,63 @@
+.my-legend .legend-title {
+    text-align: left;
+    margin-bottom: 8px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 90%;
+    font-family: 'Calibri';
+    }
+
+.my-legend .legend-scale ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    }
+
+.my-legend .legend-scale ul li {
+    display: block;
+    float: left;
+    width: 70px;
+    height: 60px;
+    margin-bottom: 6px;
+    margin-left: 10px;
+    text-align: left;
+    font-size: 80%;
+    list-style: none;
+    color: black;
+    font-family: 'Calibri';
+    }
+
+.my-legend ul.legend-labels li span {
+    display: block;
+    float: left;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    }
+
+.my-legend {
+    color: grey;
+    }
+    
+h2 {
+    color: grey;
+    text-align: center;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    height: 50px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightgray;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    }
