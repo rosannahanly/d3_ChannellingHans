@@ -125,7 +125,7 @@
     <div class="row">
         <div class="col-xs-6">
             <input list="countryDropDown" id="countryDropDownInputLeft" placeholder="Select Country One">
-            <datalist id="countryDropDown">
+            <datalist id="countryDropDxown">
             </datalist>
             <button type="button" class="btn btn-primary" id="showPillarsButtonLeft"><span>Show Country</span></button>
             
@@ -544,10 +544,10 @@ svgPillars.append("g")
     .call(yAxis);
     
 
-function generateVisPillars(data, side="left"){
-    console.log("starting function");
-    country = side === "left" ? $('#countryDropdownInputLeft').val() : $('#countryDropdownInputRight').val();
-    console.log(side);
+function generateVisPillars(dataset, side="left"){
+    //console.log("starting function");
+    console.log(dataset[0]);
+    country = side === "left" ? $('#countryDropDownInputLeft').val() : $('#countryDropDownInputRight').val(); 
     svgPillars.select('#x-axisP').call(xAxisPillar);
     let filtered_dataset = dataset.filter(yearAndCountryFilterP);
     let twelvePillars = [];
@@ -560,7 +560,7 @@ function generateVisPillars(data, side="left"){
     if (side === "left") {
         /*******PERFORM DATA JOIN*******/
         let leftBars = svgPillars.selectAll('#leftBars')
-        .data(filtered_dataset, function key(d) {
+            .data(filtered_dataset, function key(d) {
             return d[0].split('_'[2]);
         });
         
@@ -589,7 +589,7 @@ function generateVisPillars(data, side="left"){
             return "leftBars";
             })
             .attr("x", function(d,i) {
-            return xScalePillar(d[0],split('_')[2]);
+            return xScalePillar(d[0].split('_')[2]);
             })
             .attr("y", function(d) {
             return yScale(+d[1]);
