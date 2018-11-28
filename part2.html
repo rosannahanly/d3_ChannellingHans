@@ -275,7 +275,8 @@
         .attr("width", svg_width + margin.left + margin.right)
 		.attr("height", svg_height + margin.top + margin.bottom)
 		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        ;
 
 function generateVis(){
             
@@ -427,6 +428,7 @@ function handleData(dataset){
     // Create the scales and call the axis
     makeScales(dataset);
     createAxis();
+    createYearText();
     createPillarsXAxis();
     // Generate the initial visualisation
     generateVis(dataset);
@@ -462,6 +464,15 @@ function makeScales(data){
     yScale.domain([0, max_Global_Competitiveness_Index]);
     rScale.domain([0, max_population]);
 }
+   
+function createYearText(){
+    svg.append("text")
+        .attr("id", "year_header")
+        .attr("x", "200")
+        .attr("y", "200")
+    .text(year_header);
+        ;
+}
 
 function createAxis(){
     //create x-axis
@@ -493,6 +504,7 @@ function createAxis(){
 		.text("Global_Competitiveness_Index")
         .style("font-weight", "bold")
         .style("font-size", "14pt");
+    
 }
 
 function populateCountryDropDown(data){
