@@ -70,7 +70,9 @@
     }
   .my-legend {
     color: grey;
-    }</style>
+    }
+    
+    </style>
     
 </head>
 <body>
@@ -121,6 +123,13 @@
             </ul>
         </div>
     </div>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div id="secondvis">
+            <h2>Select two countries to compare their pillars of competitiveness</h2></div></div>
+    
     <!--The control buttons for the second visualisation-->
     <div class="row">
         <div class="col-xs-6">
@@ -172,7 +181,9 @@
         console.log("Years are working!!")
         display_year=+this.value;
         d3.select("#year_header").text("Year: " + display_year)
-        generateVis(dataset, false);
+        generateVis(dataset, false)
+        generateVisPillars(dataset)
+        generateVisPillars(dataset, "right");
     };
 
     var showingTrace = false;
@@ -447,7 +458,7 @@ function makeScales(data){
     var max_Global_Competitiveness_Index = d3.max(dataset, 
     function(d){return d.Global_Competitiveness_Index});
                 
-    xScale.domain([10, max_GDP]);
+    xScale.domain([90, max_GDP+20]);
     yScale.domain([0, max_Global_Competitiveness_Index]);
     rScale.domain([0, max_population]);
 }
@@ -536,12 +547,30 @@ function createPillarsXAxis(data) {
 svgPillars.append("g")
     .attr("class", "axis")
     .attr("id", "x-axisP")
-    .attr("transform", "translate(0," + svg_height + ")");
+    .attr("transform", "translate(0," + svg_height + ")")
+    .append("text")
+        .text("Pillars of Global Competitiveness")
+        .attr("dy", "3em")
+        .attr("dx", "25em")
+        .style("fill", "grey")
+        .style("font-weight", "bold")
+        .style("font-size", "14pt");
 
 svgPillars.append("g")
     .attr("class", "axis")
     .attr("id", "y-axis")
-    .call(yAxis);
+    .call(yAxis)
+    .append("text")
+		.attr("transform", "rotate(-90)")
+//	    .attr("y", 6)
+		.attr("dy", "-3em")
+        .attr("dx", "-6em")
+//		.style("text-anchor", "end")
+        .style("fill", "grey")
+		.text("Pillar Score")
+        .style("font-weight", "bold")
+        .style("font-size", "14pt");
+    
     
 
 function generateVisPillars(dataset, side="left"){
@@ -580,7 +609,7 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "black");
+            .style("fill", "rgb(158, 202, 225)")
         
         
         leftBars.enter()
@@ -598,7 +627,7 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "red")
+            .style("fill", "rgba(158, 202, 225, 0.7)")
             .transition()
             .duration(2000);
         
@@ -634,7 +663,7 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "yellow");
+            .style("fill", "rgb(49, 130, 189)");
         
         
         rightBars.enter()
@@ -653,7 +682,7 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "blue");
+            .style("fill", "rgb(49, 130, 189)");
         
         /****EXIT SELECTION****/
         
