@@ -33,20 +33,24 @@
             <div class="row">
                 <div class="col-xs-3">
                     <!-- I think this button needs to be moved -->
-                    <button type="button" class="btn btn-success" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
+                    <!-- Play Pause Button -->
+                    <button type="button" class="btn btn-success btn-lg" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
                 </div>
+                    <!--Year dropdown allows user to select a year for user to see data for-->
                     <div class="col-xs-3">
-                            <input list="yearDropDown" id = "yearDropDownInput" placeholder="2007">
+                            <input list="yearDropDown" id = "yearDropDownInput" placeholder="Select a year">
                             <datalist id="yearDropDown">
         
                             </datalist>
                         </div>
+                        <!--Country Drop Down allows user to select a country to see the trace for-->
                 <div class="col-xs-6">
                     <input list="countryDropDown" name = "browser" id = "countryDropDownInput" placeholder="Select Country">
                     <datalist id="countryDropDown">
 
                     </datalist>
-                    <button type="button" class="btn btn-primary" id="traceButton">Show Trace</button>
+                    <!--Button to start/stop the trace.-->
+                    <button type="button" class="btn btn-primary" id="traceButton"><span>ShowTrace</span></button>
                 </div>
             </div>
         </div>
@@ -56,6 +60,7 @@
         <div class="col-xs-2"></div>
         <div class="col-xs-8">
         <div class='my-legend'>
+            <!--Bubble Chart legend-->
                 <div class='legend-title'>Legend</div>
                 <div class='legend-scale'>
                     <ul class='legend-labels'>
@@ -71,30 +76,28 @@
         </div>
         </div>
     </div>
+    <!--Place for the first graph to be drawn-->
     <div class="row">
             <h3 id="part1"></h3>
     </div>
-    <!--Legend for the first graph-->
-    <br>
-    <br>
     <br>
     <div class="row">
         <div id="secondvis">
             <h2>Select two countries to compare their pillars of competitiveness</h2></div></div>
-    
+    <br>
     <!--The control buttons for the second visualisation-->
     <div class="row">
         <div class="col-xs-5">
+            <!--Drop Down input for the first country-->
             <input list="countryDropDown" id="countryDropDownInputLeft" placeholder="Select Country One">
             <datalist id="countryDropDxown">
             </datalist>
-            <button type="button" class="btn btn-primary" id="showPillarsButtonLeft"><span>Show Country</span></button>
-            
-            
+            <button type="button" class="btn btn-primary" id="showPillarsButtonLeft"><span>Show Country</span></button>          
         </div>
         <div class="col-xs-2">
             <h3> vs.</h3>
         </div>
+        <!--Drop Down Input for the second country-->
         <div class="col-xs-5">
                 <input list="countryDropDown" id="countryDropDownInputRight" placeholder="Select Country One">
                 <datalist id="countryDropDown">
@@ -106,34 +109,33 @@
     <!--This is where the second visualisation will go-->
     <h2 id="part2"></h2>
 </div>
-
-
-
-
-
-    
+<!--Footer-->
+<footer><h6>Created by Rosanna Hanly and Sophie Heseltine</h6></footer>   
 </body>
-<script>
 
+<script>
+//************************************************//
+//Start of tooltips//
+
+    //Function to control the playpause button on click
     let playing = false;
     $("#playPause").on("click", function(){
         playing = !playing;
         if (playing){
             $('#playPause').addClass('btn-danger').removeClass('btn-success');
             $('#playPause span').addClass('glyphicon-pause').removeClass('glyphicon-play');
-            //$('#playPauseButton p').text("Pause"); 
         }
         else {
             $('#playPause').addClass('btn-success').removeClass('btn-danger');
             $('#playPause span').addClass('glyphicon-play').removeClass('glyphicon-pause');
-            //$('#playPauseButton p').text("Play"); 
         }
     });
 
+    //function to change the visualisation based on the year drop down input
     let year = 2007;
     //let dataset = {};
     document.getElementById("yearDropDownInput").oninput = function(){
-        console.log("Years are working!!")
+        //console.log("Years are working!!")
         display_year=+this.value;
         d3.select("#year_header").text(display_year)
         generateVis(dataset, false)
@@ -141,6 +143,7 @@
         generateVisPillars(dataset, "right");
     };
 
+    //function to show the trace of a country selected by the country drop down input
     var showingTrace = false;
     var country = "";
     $('#traceButton').on("click", function(){
@@ -162,46 +165,49 @@
     let countryOneButtonClicked = false;
     let countryTwoButtonClicked = false;
     
+    //function to generate the pillars visualisation for the first country selected
     $('#showPillarsButtonLeft').on("click", function() {
         countryOneButtonClicked = true;
         let pillarsCompare = countryTwoButtonClicked;
         let country = $('#countryDropDownInputLeft').val();
-        console.log(country + "country");
+        //console.log(country + "country");
         if (country == "") return;
         generateVisPillars(dataset);
-        console.log(country + "left bars");
+        //console.log(country + "left bars");
     });
     
+    //function to generate the pillars visualisation for the second country selected
     $('#showPillarsButtonRight').on("click", function() {
         countryTwoButtonClicked = true;
         let pillarsCompare = countryOneButtonClicked;
         let country = $('#countryDropDownInputRight').val();
         if (country == "") return;
         generateVisPillars(dataset, "right");
-        console.log(country + "right bars");
+        //console.log(country + "right bars");
     });
 
-
-
-    // margins
+    // margins of svg canvas
     var margin = {top: 40, right: 60, bottom: 60, left:80};
         
-    // width and height
+    // width and height of svg canvas
     var outer_width = 1050;
     var outer_height = 500
 
     var svg_width = outer_width - margin.left - margin.right;
     var svg_height = outer_height - margin.top - margin.bottom;
         
+    // function to create a filter for a specific year
     display_year = 2007;
     function yearFilter(value){
         return (value.Year == display_year)
     }
 
+    // function to create a filter for a specific year and country (FOR TRACE)
     function yearAndCountryFilter(value){
         return value.Country == country && +value.Year <= +display_year;
     }
-    
+
+    //function to create a filter for a specific year and country (FOR PILLARS VIS)
     function yearAndCountryFilterP(value) {
         return yearFilter(value) && value.Country == country;
     }
@@ -214,16 +220,12 @@
     rScale = d3.scaleSqrt().range([0, 5]);
     yScale = d3.scaleLinear().domain([0,7]).range([svg_height, 0]);
                
-    // x-axis connected to the x scale
+    // x-axis connected to the x scale (need to change the tick labels)
     var xAxis = d3.axisBottom().scale(xScale).ticks(10, ".0s");
         
     //define y-axis
-    var yAxis = d3.axisLeft().scale(yScale).ticks(5).tickFormat(d3.format(".0s"));
+    var yAxis = d3.axisLeft().scale(yScale).ticks(5);
            
-    var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
     // Create an svg element
     var svg = d3.select("#part1")
         .append("svg")
@@ -233,8 +235,9 @@
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         ;
 
-function generateVis(){
-            
+// function to generate the main visualisation
+function generateVis(){ 
+            //use year filter to display data for the year selected           
             var filtered_dataset = dataset.filter(yearFilter);
             
             /**********DATA JOIN************/
@@ -243,8 +246,7 @@ function generateVis(){
                                 return d.Country;
                             });
             
-            /**********UPDATE SELECTION************/
-             
+            /**********UPDATE SELECTION************/             
             points.transition().duration(2000)
                 .attr("cx", function(d,i){ return xScale(+d.GDP); })
                 .attr("cy", function(d){ return yScale(+d.Global_Competitiveness_Index); })
@@ -253,8 +255,8 @@ function generateVis(){
                     if(showingTrace) return .3;
                     else return .5;
                 })
-                .style("fill", function(d) 
-                {
+                //colour bubbles based on region
+                .style("fill", function(d) {
                 region = d.Forum_classification
                 if (region === "Europe and North America") {
                     return "blue"
@@ -278,11 +280,12 @@ function generateVis(){
                     return "orange"
                 }
             });
-
+            //change behaviour for trace setting
             if (showingTrace){
                 country = $('#countryDropDownInput').val();
+                //use new filter
                 let selectedCountry = dataset.filter(yearAndCountryFilter);
-                console.log(selectedCountry);
+                //console.log(selectedCountry);
                 let tracePoints = svg.selectAll("#circle_trace")
                     .data(selectedCountry, function key(d){
                         return d.Country;
@@ -295,6 +298,7 @@ function generateVis(){
                     .attr("cx", function(d,i){ return xScale(+d.GDP); })
                     .attr("cy", function(d){ return yScale(+d.Global_Competitiveness_Index); })
                     .attr("r", function(d){ return rScale(+d.Population); })
+                    //higher opacity for the selected country
                     .style("fill-opacity", function(d){
                         return 0.8;
                     })
@@ -360,36 +364,33 @@ function generateVis(){
                 
             })
             .style("fill-opacity", .5)
+            //append the name and population of country when the user hovers over bubble
             .append("title").text(function(d, i) {return d.Country + "\nPopulation: " + d.Population});
-          /**********EXIT SELECTION************/
-            
-            points.exit().remove();
-            
-            d3.select("#year_header").text(display_year)
-            
-        
-}
 
+          /**********EXIT SELECTION************/           
+            points.exit().remove();
+            d3.select("#year_header").text(display_year)        
+}
+var file = "./GCI_CompleteData4.csv";
 // loading in Data     
-d3.csv("./GCI_CompleteData4.csv").then(function(data){
+d3.csv(file).then(function(data){
     dataset=data;
     handleData(dataset);
 }, function(error) {
+    //error message appears to user if the inncorrect file is used
     console.log("Error loading data")
-    console.log(error);
-    document.getElementById("hans").innerHTML += "<br/><span>Error Loading in data</span>"
+    document.getElementById("hans").innerHTML += "<span>ERROR:</span><br>" + file + " does not exist"
 });
+
+//top-level function that calls other functions to make the visualisation
 function handleData(dataset){
-    // Create the scales and call the axis
     makeScales(dataset);
     createAxis();
     createYearText();
     createPillarsXAxis();
-    // Generate the initial visualisation
     generateVis(dataset);
     generateVisPillars(dataset);
     generateVisPillars(dataset, "right");
-    //populate country dropdown
     populateCountryDropDown(dataset);
     populateYearDropDown(dataset);
     setInterval(function(){
@@ -406,20 +407,21 @@ function handleData(dataset){
     }, 2000);
 }
 
-function makeScales(data){
-    dataset = data;
-                
-    var max_population = d3.max(dataset, function(d){return d.Population    ;} );
+//function to create the scales based on the data
+function makeScales(dataset){                
+    var max_population = d3.max(dataset, function(d){return d.Population;} );
     var min_GDP = d3.min(dataset, function(d) { return +d.GDP;} );
     var max_GDP = d3.max(dataset, function(d) { return +d.GDP;} );
     var max_Global_Competitiveness_Index = d3.max(dataset, 
     function(d){return d.Global_Competitiveness_Index});
                 
-    xScale.domain([90, max_GDP+20]);
+    //create domains for the scales based on the data (XScale uses +-20 for the min/max GDP so that the bubbles are not on the axis)
+    xScale.domain([+min_GDP-20, max_GDP+20]);
     yScale.domain([0, max_Global_Competitiveness_Index]);
     rScale.domain([0, max_population]);
 }
-   
+
+//function to append the year to the svg canvas
 function createYearText(){
     svg.append("text")
         .attr("id", "year_header")
@@ -430,7 +432,7 @@ function createYearText(){
         .style("opacity", "0.1")
         ;
 }
-
+//funtion to create the x and y axis
 function createAxis(){
     //create x-axis
     svg.append("g")
@@ -453,10 +455,8 @@ function createAxis(){
 		.call(yAxis)
 		.append("text")
 		.attr("transform", "rotate(-90)")
-//	    .attr("y", 6)
 		.attr("dy", "-3em")
         .attr("dx", "-4em")
-//		.style("text-anchor", "end")
         .style("fill", "grey")
 		.text("Global_Competitiveness_Index")
         .style("font-weight", "bold")
@@ -464,6 +464,7 @@ function createAxis(){
     
 }
 
+// populate the country drop down of all the countries listed in the csv file
 function populateCountryDropDown(data){
     let countries = new Set();
     _.forEach(data, function(row) {
@@ -476,7 +477,7 @@ function populateCountryDropDown(data){
         countryDropDownUL.appendChild(option);
     };
 }
-
+// populate the year drop down of all the years listed in the csv file
 function populateYearDropDown(data){
     let years = new Set();
     _.forEach(data, function(row){
@@ -489,17 +490,19 @@ function populateYearDropDown(data){
         yearDropDownUL.appendChild(option);
     };
 }
+//######################## PILLARS OF GLOBAL COMPETIVENESS SECTION ############################//
 
+//svg canvas for second visulaisation
 var svgPillars = d3.select("#part2")
             .append("svg")
             .attr("width", svg_width + margin.left + margin.right)
             .attr("height", svg_height + margin.top + margin.bottom)
             .style("background", "white")
-            //.style("width", "80vw")
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var x = [];
+// x axis for pillars
 function createPillarsXAxis(data) {
     //console.log(dataset.columns);
     var columns = dataset.columns;
@@ -531,30 +534,29 @@ svgPillars.append("g")
     .call(yAxis)
     .append("text")
 		.attr("transform", "rotate(-90)")
-//	    .attr("y", 6)
 		.attr("dy", "-3em")
         .attr("dx", "-6em")
-//		.style("text-anchor", "end")
         .style("fill", "grey")
 		.text("Pillar Score")
         .style("font-weight", "bold")
         .style("font-size", "14pt");
     
     
-
+// function to create the second visualisation (a barChart)
 function generateVisPillars(dataset, side="left"){
     //console.log("starting function");
-    console.log(dataset[0]);
+    //console.log(dataset[0]);
     country = side === "left" ? $('#countryDropDownInputLeft').val() : $('#countryDropDownInputRight').val(); 
     svgPillars.select('#x-axisP').call(xAxisPillar);
+    // use the pillars filter to filter the dataset
     let filtered_dataset = dataset.filter(yearAndCountryFilterP);
     let twelvePillars = [];
     if (typeof filtered_dataset[0] !== 'undefined') {
         twelvePillars = Object.entries(filtered_dataset[0]).slice(2,14);
-        console.log(twelvePillars);
+        //console.log(twelvePillars);
         filtered_dataset = twelvePillars;
     }
-    
+    //draw the left bars for the first country selected
     if (side === "left") {
         /*******PERFORM DATA JOIN*******/
         let leftBars = svgPillars.selectAll('#leftBars')
@@ -563,7 +565,6 @@ function generateVisPillars(dataset, side="left"){
         });
         
         /******** UPDATE SELECTION*********/
-        
         
         leftBars
             .transition()
@@ -581,7 +582,7 @@ function generateVisPillars(dataset, side="left"){
             .style("fill", "blue")
             .style("opacity", "0.6");
         
-        
+        /******** ENTER SELECTION*********/
         leftBars.enter()
             .append("rect")
             .attr("id", function(d) {
@@ -602,7 +603,7 @@ function generateVisPillars(dataset, side="left"){
             .transition()
             .duration(2000);
         
-        
+        /****EXIT SELECTION****/
         leftBars.exit()
             .transition()
             .duration(2000)
@@ -611,7 +612,7 @@ function generateVisPillars(dataset, side="left"){
     }
     
     
-    //right bars
+    //draw the right bars
     /*****DATA JOIN****/
     else {
         let rightBars = svgPillars.selectAll('#rightBars')
@@ -637,7 +638,7 @@ function generateVisPillars(dataset, side="left"){
             .style("fill", "black")
             .style("opacity", "0.2");
         
-        
+        /******** ENTER SELECTION*********/
         rightBars.enter()
             .append("rect")
             .attr("id", function(d) {
@@ -666,7 +667,5 @@ function generateVisPillars(dataset, side="left"){
             .remove();
     }
 }
-
-
 </script>
 </html>
