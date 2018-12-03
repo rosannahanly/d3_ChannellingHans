@@ -41,12 +41,16 @@
     }
     
 h2 {
-    color: grey;
+    color: darkslategray;
     text-align: center;
 }
 
 h3 {
     margin-top: 0;
+}
+
+h4 {
+    color:grey;
 }
 
 #hans {

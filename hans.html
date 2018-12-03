@@ -22,8 +22,15 @@
 </head>
 <body>
     <h2>Channelling Hans</h2>
-    <h4 style="text-align: center; margin-left: 20%; margin-right:20%">Press the the play button to see the development of the countries of the world based on GDP and the Global Competiveness Index between the years 2007-2017</h4>
-
+    <h4 style="text-align: center; margin-left: 20%; margin-right:20%">Press the the play button to see the development of the countries of the world based on GDP and the Global Competiveness Index between the years 2007-2017
+    <br>
+    <br>
+    You can select a specific year and also select a specific country to see its own development, compared to the others, over the years.
+    </h4>
+    
+    <!-- Play Pause Button -->
+    <button type="button" class="btn btn-success btn-lg" id="playPause" style="margin-left: 45%; margin-right: 45%"><span class="glyphicon glyphicon-play"></span></button>
+    
 <div class="container">
     <p id="hans">
     </p>
@@ -32,9 +39,6 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-xs-3">
-                    <!-- I think this button needs to be moved -->
-                    <!-- Play Pause Button -->
-                    <button type="button" class="btn btn-success btn-lg" id="playPause"><span class="glyphicon glyphicon-play"></span></button>
                 </div>
                     <!--Year dropdown allows user to select a year for user to see data for-->
                     <div class="col-xs-3">
@@ -83,11 +87,12 @@
     <br>
     <div class="row">
         <div id="secondvis">
-            <h2>Select two countries to compare their pillars of competitiveness</h2></div></div>
+            <h4 style="text-align: center">Select two countries to compare their pillars of competitiveness</h4></div></div>
     <br>
     <!--The control buttons for the second visualisation-->
     <div class="row">
-        <div class="col-xs-5">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-4">
             <!--Drop Down input for the first country-->
             <input list="countryDropDown" id="countryDropDownInputLeft" placeholder="Select Country One">
             <datalist id="countryDropDxown">
@@ -99,7 +104,7 @@
         </div>
         <!--Drop Down Input for the second country-->
         <div class="col-xs-5">
-                <input list="countryDropDown" id="countryDropDownInputRight" placeholder="Select Country One">
+                <input list="countryDropDown" id="countryDropDownInputRight" placeholder="Select Country Two">
                 <datalist id="countryDropDown">
                 </datalist>
                 <button type="button" class="btn btn-primary" id="showPillarsButtonRight"><span>Show Country</span></button>
