@@ -138,6 +138,7 @@
         //console.log("Years are working!!")
         display_year=+this.value;
         d3.select("#year_header").text(display_year)
+        d3.select("#year_header1").text(display_year)
         generateVis(dataset, false)
         generateVisPillars(dataset)
         generateVisPillars(dataset, "right");
@@ -369,9 +370,10 @@ function generateVis(){
 
           /**********EXIT SELECTION************/           
             points.exit().remove();
-            d3.select("#year_header").text(display_year)        
+            d3.select("#year_header").text(display_year)
+            d3.select("#year_header1").text(display_year)
 }
-var file = "./GCI_CompleteData4.csv";
+var file = "./GCI4_imputed_values.csv";
 // loading in Data     
 d3.csv(file).then(function(data){
     dataset=data;
@@ -387,6 +389,7 @@ function handleData(dataset){
     makeScales(dataset);
     createAxis();
     createYearText();
+    createYearTextforPillars();
     createPillarsXAxis();
     generateVis(dataset);
     generateVisPillars(dataset);
@@ -432,6 +435,18 @@ function createYearText(){
         .style("opacity", "0.1")
         ;
 }
+    
+function createYearTextforPillars(){
+    svgPillars.append("text")
+        .attr("id", "year_header1")
+        .attr("x", svg_width/5)
+        .attr("y", svg_height/1.5)
+        .text(year_header1)
+        .style("font-size", "200pt")
+        .style("opacity", "0.3")
+        ;
+}
+    
 //funtion to create the x and y axis
 function createAxis(){
     //create x-axis
@@ -579,8 +594,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "blue")
-            .style("opacity", "0.6");
+            .style("fill", "pink")
+            .style("opacity", "0.7");
         
         /******** ENTER SELECTION*********/
         leftBars.enter()
@@ -598,8 +613,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "blue")
-            .style("opacity", "0.6")
+            .style("fill", "pink")
+            .style("opacity", "0.7")
             .transition()
             .duration(2000);
         
@@ -635,8 +650,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "black")
-            .style("opacity", "0.2");
+            .style("fill", "red")
+            .style("opacity", "0.7");
         
         /******** ENTER SELECTION*********/
         rightBars.enter()
@@ -655,8 +670,8 @@ function generateVisPillars(dataset, side="left"){
             .attr("height", function(d) {
             return svg_height - yScale(+d[1]);
             })
-            .style("fill", "black")
-            .style("opacity", "0.2");
+            .style("fill", "red")
+            .style("opacity", "0.7");
         
         /****EXIT SELECTION****/
         
