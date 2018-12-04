@@ -289,6 +289,8 @@ function generateVis(){
             //change behaviour for trace setting
             if (showingTrace){
                 country = $('#countryDropDownInput').val();
+                //SOPHIE to review; for static trace visualisation
+                display_year = 2017;
                 //use new filter
                 let selectedCountry = dataset.filter(yearAndCountryFilter);
                 //console.log(selectedCountry);
