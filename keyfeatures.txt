@@ -1,0 +1,20 @@
+We imputed the null values present in the dataset for the attribute Global Competitiveness Index (GCI), using pandas in a jupyter notebook (Impute Missing Values for GCI.ipynb), by taking the mean value for that attribute for each country over the course of 2007-2017. In the case of Angola, for example, there were multiple years of GCI data missing. We took the mean of the existing values for GCI for Angola and replaced the null values with this value.
+
+
+When the user first opens the page they are presented with a bubble plot representing the countries of the world. The bubble area is mapped to population of the country and scaled using a square root scale. The countries are described by GDP and Global Competitiveness Index on the x- and y-axis respectively. The x-axis (GDP) is scaled using a log scale in order to be able to view all countries on the graph.
+
+
+The bubbles are coloured according to their region with the legend of the colours displayed at the top of page. When the user hovers over a bubble the name and population of the country the bubble represents is displayed.
+
+
+The visualisation first displays the data for 2007. The play button at the top of the page allows the user to animate the change in country statistics between 2007-2017. The animation will run, looping back to 2007, until the user presses the play button again (which is now a pause button) to pause the animation. The first dropdown menu, ‘Select a year’, allows the user to view data for a particular year.
+
+
+The ‘Select Country’ dropdown allows the user to select any country in the world and by pressing the ‘Show Trace’ button they can see its development from 2007-2017 on the graph in a static visualisation. The selected country is highlighted to the user by using a black stroke and reducing the opacity of the other countries’ bubbles. The ‘Hide Trace’ button allows the user to see the animation once more with the play button.
+
+
+When the user scrolls down the page they will see the second visualisation. Here the user can select any two countries from the dropdown lists. Once the ‘Show Country’ button is selected, bars appear showing the individual pillars of the global competitiveness index for both countries so that they can be compared. Colour is used in order to distinguish between both countries. Pressing the play button at the top of the page animates the changes in both countries’ pillars of competitiveness index between 2007-2017.
+
+
+We chose to use a grouped barchart for the second visualisation as bar charts are simple to understand and we felt that their visual structure matched the structure of the data.  As there were no parts of a whole relationship in the data, we decided that a grouped barchart was more appropriate than a stacked bar chart. In this case, there was a need to provide a multivariate visualisation. Grouped barcharts are useful for this as they allow comparison of the pillars of global competitiveness for one country as well as comparison of the pillars between two countries.
+
